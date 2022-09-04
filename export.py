@@ -11,7 +11,7 @@ EXPECTED_VAL_COUNT = 8
 
 
 def main(device: str, host: str, port: int, auth_b64: str):
-    values_int = read_metrics_from_device(device=device)
+    values_int = read_metrics_from_device(device=device, separator=DEVICE_READ_SEPARATOR)
     for value_series in values_int:
         if len(value_series) == EXPECTED_VAL_COUNT:
             http_client = HTTPConnection(host=host, port=port)
@@ -30,11 +30,11 @@ def send_values_to_api(http_client: HTTPConnection, full_url: str, auth_b64: str
         print(f"Error on uploading values to {full_url} by POST: {resp.status} {resp_payload}")
 
 
-def read_metrics_from_device(device: str) -> t.List[t.List[int]]:
+def read_metrics_from_device(device: str, separator: str) -> t.List[t.List[int]]:
     reads = []
     with open(device, "r") as device_file:
         for line in device_file.readlines():
-            value_series = line.strip().split(DEVICE_READ_SEPARATOR)
+            value_series = line.strip().split(separator)
             for values_str in value_series:
                 values = list(filter(lambda v: len(v.strip()), values_str.split(";")))  # filter empty strings
                 values_int = list(filter(lambda v: v is not None, [safe_to_int(v) for v in values]))  # filter values not being INTs
