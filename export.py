@@ -51,4 +51,4 @@ def safe_to_int(val: str) -> t.Optional[int]:
 
 if __name__ == '__main__':
     main(device=DEVICE, host=sys.argv[1], port=int(sys.argv[2]), auth_b64=sys.argv[3])
-    # main(device="example.csv", host="", port=80, auth_b64="testpasswd=")
+    # main(device="example.csv", host="localhost", port=80, auth_b64="testpasswd=")
